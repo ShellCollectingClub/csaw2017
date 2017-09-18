@@ -1,8 +1,11 @@
 from pwn import *
+from time import sleep
 import struct
 
-#s = process("./pilot")
-s = remote("pwn.chal.csaw.io",8464)
+s = process("./pilot")
+#s = remote("pwn.chal.csaw.io",8464)
+
+raw_input("Waiting on GDB")
 
 # Recv irrelevant data
 s.recvuntil("Location:")
