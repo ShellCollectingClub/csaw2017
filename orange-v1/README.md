@@ -2,9 +2,9 @@
 ## 100 points
 ## Web
 
-###I wrote a little proxy program in NodeJS for my poems folder.
-###Everyone wants to read flag.txt but I like it too much to share.
-###http://web.chal.csaw.io:7311/?path=orange.txt
+### I wrote a little proxy program in NodeJS for my poems folder.
+### Everyone wants to read flag.txt but I like it too much to share.
+### http://web.chal.csaw.io:7311/?path=orange.txt
 
 This challange was actually the first of two unintended solutions for what
 became the `orange v3` challenge.
@@ -31,4 +31,4 @@ to figure out how to travese directories. It turns out, that by simply using
 
 ![IMG 3](img/img3.png)
 
-###flag: flag{thank_you_based_orange_for_this_ctf_challenge}
+### flag: flag{thank_you_based_orange_for_this_ctf_challenge}
