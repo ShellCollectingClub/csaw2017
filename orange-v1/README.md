@@ -6,7 +6,7 @@
 #### Everyone wants to read flag.txt but I like it too much to share.
 #### http://web.chal.csaw.io:7311/?path=orange.txt
 
-This challange was actually the an unintended solution for what became the 
+This challange was actually an unintended solution for what became the 
 `orange v3` challenge.
 
 We're presented with some type of file getting proxy service where the filename
