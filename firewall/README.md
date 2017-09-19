@@ -1,6 +1,6 @@
 # FIREWALL.EXE #
 
-## SHOMBO and HEFRPIDGE ##
+## SHOCKTOP and HEFRPIDGE ##
 
 Firewall.exe the only beautiful Windows executable. My first step was to investigate the PE itself using PPEE. Very quickly I was able to recognize this as a POSIX subsystem executable. This was evident from it's NtHeader.OptionalHeader.Subsystem and It's import directory only  depending on PSXDLL.dll.
 
