@@ -10,7 +10,7 @@ beans or something. On the main page, a list is presented of all of the root
 bean types. We're going to call them the root types since they don't have any
 parent beans.
 
-[IMG 1]
+![IMG 1](img/img1.png)
 
 We did notice that a bean called flag was present, but appeared to be redacted
 to some extent. At this point, we determined that the flag most likely resided
@@ -44,7 +44,7 @@ be very hard to produce arbitrary collisions. A quick google gave us an
 input. Using that yileded the result `ParDJon` that we could then use to login
 to the admin page.
 
-[IMG 2]
+![IMG 2](img/img2.png)
 
 With this result, it wasn't immediately clear what to do next. We tried using
 that and collisions with it to authenticated into the app, but that didn't
@@ -53,20 +53,20 @@ get us anywhere. Let's abandon this for now.
 Moving into the breeding page, we are able to give our new breed a name, a
 description, and parents. 
 
-[IMG 3]
+![IMG 3](img/img3.png)
 
 We noticed that if we left the description field blank, it would inherit the
 description of the first parent. 
 
-[IMG 4]
+![IMG 4](img/img4.png)
 
 It became clear at this point that we needed to try to inherit the description
 of the flag bean. In the breeding page form, the parent options appear to be
 base64 encoded serialized bean object followed by a `-` and then finally some 
 sort of hash corresponding to that object. 
 
-[IMG 5]
-[IMG 6]
+![IMG 5](img/img5.png)
+![IMG 6](img/img6.png)
 
 We then selected the `Raid` bean to try to patch to be `Flag` since the names
 are the same length to see what results that yields us. It turns out, that
@@ -101,8 +101,8 @@ Ok, so now we can produce the corresponding hashes. Let's hope that our
 assumption about just changing the string in the serialized object before is
 enough...
 
-[IMG 7]
+![IMG 7](img/img7.png)
 
-and boom goes the dynamic.
+and boom goes the dynamite.
 
 We put together a [solution script](/win.py) if anyone is interested.
