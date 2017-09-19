@@ -20,13 +20,15 @@ When we scrolled down the page, we found a link for an admin login. This login
 forbids any non alphanumeric characters. But in an attempt to browse to 
 `/admin.jsp` directly, an error was thrown:
 
-```25:           String result;
+```
+25:           String result;
 26:           // NOTE: Change $ to s when page is ready
 27:           auth.loadPassword("Pas$ion");
 28:           if (!guess.matches("[A-Za-z0-9]+")) {
 29:             result = "Only alphanumeric characters allowed";
 30:           } else {
-31:             result = auth.lookup(guess.hashCode());```
+31:             result = auth.lookup(guess.hashCode());
+```
 
 At this point, we were somewhat puzzled since we weren't quite sure how this 
 tied into what we believed to be the objective to be. But we pressed on anyway.
