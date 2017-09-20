@@ -31,10 +31,14 @@ interface, seems like a pretty straight forward buffer overflow. Passing in a
 large cyclic buffer seemed to cause it to flood my terminal with invalid input
 messages. From here I started reversing statically.
 
-Input from the user is obtained with a call to read() from stdin, with a size of
-0xf8 bytes. Fortunately for us, the destination buffer starts at `$rbp-0xb0`. If
-we write a buffer of at least 0xb8 bytes, we should be able to control RIP with
-space for 0x40 bytes of ROP chain. Let's try it.
+Input from the user is obtained with a call to `read()` from stdin, with a size
+of 0xf8 bytes. Fortunately for us, the destination buffer starts at `$rbp-0xb0`.
+
+![read call](img/read_call.png)
+![buffer size](img/buffer_size.png)
+
+If we write a buffer of at least 0xb8 bytes, we should be able to control RIP
+with space for 0x40 bytes of ROP chain. Let's try it.
 
     user@reversing:~/csaw/scv$ python -c "print 'a'*0xb8 + 'bbbbcccc'"
     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbcccc
