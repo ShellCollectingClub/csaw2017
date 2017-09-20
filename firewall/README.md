@@ -220,11 +220,24 @@ This function stores pointers to many strings in memory, zeroizes the firewall r
 
 Our initial idea was can we overflow our fire rule list to overwrite the auth_cred. This had us reversing AddFirewallRule. In my IDB you will see nice basic blocks this is after removing deobfuscation code that created nop jumps. Once removing these jumps and asking IDA to see this as a function basic blocks were back. The logic was sound for buffer overwrite. It iterated the list of firewall rules and checked if it was enabled. If it wasn't enabled it created a new rule. If it got to the max rule count it informed the user "OUT OF FIREWALL RULE SLOTS".
 
-The red herring of the challenge was we were able to get a 3 byte overflow into the auth cred. Unfortunately this was not enough to change the flag to authenticate us. This was because our final byte would always be NULL, therefore we only really got a two byte overwrite of the cred that we controlled.
+The red herring of the challenge was we were able to get a 3 byte overflow into the auth cred. This was due to a vulnerability in the EditRule function calling fgets with bufsize of 30. 
+
+    .text:00401EF1 push    offset aEnterRuleName_0 ; "ENTER RULE NAME: "
+    .text:00401EF6 call    printf_wrapper
+    .text:00401EFB add     esp, 4
+    .text:00401EFE push    30              ; bufsize... overflow
+    .text:00401F00 mov     edx, [ebp+i]
+    .text:00401F03 imul    edx, 1Ch
+    .text:00401F06 add     edx, offset firewall_rule_list.rule_name
+    .text:00401F0C push    edx             ; buffer
+    .text:00401F0D call    fgets_wrapper
+    .text:00401F12 add     esp, 8
+
+The buffer it is reading into is 21 bytes, follwed by the rest of the structure being 6 bytes, so we get a 3 byte overflow. Unfortunately this was not enough to change the flag to authenticate us. This was because our final byte would always be NULL because of fgets, therefore we only really got a two byte overwrite of the cred that we controlled.
 
 I browsed over a bit of code at one point and didn't really notice it at first, noted it and moved on, just didn't stick out well enough. Then at some point I jacked up typing and seg faulted the program, winner winner chicken dinner! Looking at what I had done I had provided bad input to the edit rule menu. Anytime you wanted to print or edit a rule this little bitty of code happened.
 
-    .text:00401EA8 loc_401EA8:                             ; CODE XREF: EditFirewallRules+34↑j
+
     .text:00401EA8                 push    offset aEditingFirewal ; "EDITING FIREWALL RULE -\n"
     .text:00401EAD                 call    printf_wrapper
     .text:00401EB2                 add     esp, 4
@@ -247,9 +260,9 @@ I browsed over a bit of code at one point and didn't really notice it at first, 
     .text:00401EE3                 jmp     loc_401FC0
     .text:00401EE8 ; ---------------------------------------------------------------------------
     .text:00401EE8
-    .text:00401EE8 loc_401EE8:                             ; CODE XREF: EditFirewallRules+74↑j
-    .text:00401EE8                 mov     ecx, [ebp+i]
-    .text:00401EEB                 sub     ecx, 1
+    .text:00401EE8 loc_401EE8:                              ; CODE XREF: EditFirewallRules+74↑j
+    .text:00401EE8                 mov     ecx, [ebp+i]		; user supplied index
+    .text:00401EEB                 sub     ecx, 1			; subtract 1... supply 0, get rule[-1] 
     .text:00401EEE                 mov     [ebp+i], ecx
 
 What this essentially did was ask the user what rule they want to edit. Expecting the user to give a value of 1-16. It then converts that number to array index with sub ecx, 1. Giving the input of 0, gave us a -1 offset of the array. This allowed us to now read and write to memory prior to the array. Looking at memory again this was beneficial and showed why we crashed on bad input.
