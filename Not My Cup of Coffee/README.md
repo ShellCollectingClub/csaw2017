@@ -1,4 +1,4 @@
-# Not My Cup of Coffee
+#Not My Cup of Coffee
 ## 300 points
 ## Web
 
@@ -105,4 +105,4 @@ enough...
 
 and boom goes the dynamite.
 
-We put together a [solution script](/win.py) if anyone is interested.
+We put together a [solution script](win.py) if anyone is interested.
