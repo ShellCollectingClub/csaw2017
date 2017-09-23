@@ -1,7 +1,8 @@
-b *0x4074f8
-#ignore 1 0x50
-#set print elements 0
+b *0x4074d7
+#ignore 1 0x20  # break into the script after 0x20 emulated lines
+#set print elements 0   # don't truncate "banana string" register output
 
+# Function to set register pseudo-variables
 define setvm
 set $r0 = (char *)*((char **)($rsp+0x2e0))
 set $r1 = (char *)*((char **)($rsp+0x2c0))
@@ -22,6 +23,7 @@ set $a6 = (char *)*((char **)($rsp+0x320))
 set $a7 = (char *)*((char **)($rsp+0x300))
 end
 
+# View the interpreter registers
 define getvm
 echo \n
 
@@ -67,9 +69,11 @@ echo \ a7: \
 x/s $a7
 end
 
+# Automatically set and view registers when breakpoint 1 is hit
 commands 1
 setvm
 getvm
 end
 
+# Automatically start the program with banana.script
 r banana.script
