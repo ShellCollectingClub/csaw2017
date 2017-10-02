@@ -157,7 +157,7 @@ Given that the heap is executable and the server lets us send an arbitrary buffe
 
 Starting a new session and viewing the board again - we can inspect the extra memory that was thrown back at us for any addresses that jump out. Since this is a new session, we only see stack addresses. On a hunch, I allocated a new initial board and viewed it, this time yielding some heap addresses which give us a constant offset to our buffer. Success! 
 
-![heapbytes](img/heap_bytes.png)
+![heapbytes](img/heapbytes.png)
 
 The next challenge is finding a candidate to write too. Luckily, from parsing the disassembly, we find a call to fwrite shortly after our input is written to the buffer ("Delinked!"). So, we overwrite fwrite's GOT with the address to our heap buffer and get code exec!
 
